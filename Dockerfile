@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy package files and install dependencies cleanly
-COPY package*.json ./
+COPY package.json ./
 RUN npm install --omit=dev
 
 # Copy all other source files
