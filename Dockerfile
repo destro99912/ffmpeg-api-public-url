@@ -1,8 +1,12 @@
-# Use an official Node.js image with Debian base
-FROM node:18-slim
+# Use a full Node image with Debian base
+FROM node:18-bullseye
 
-# Install FFmpeg
-RUN apt-get update && apt-get install -y ffmpeg && apt-get clean
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    python3 \
+    build-essential \
+    && apt-get clean
 
 # Set working directory
 WORKDIR /app
@@ -14,7 +18,7 @@ RUN npm install
 # Copy remaining files
 COPY . .
 
-# Expose port (match your index.mjs)
+# Expose port (make sure this matches your server)
 EXPOSE 8080
 
 # Start server
