@@ -39,9 +39,11 @@ app.post("/merge", async (req, res) => {
 
     const outputPath = `/tmp/${output_filename}`;
 
-    exec(`ffmpeg -f concat -safe 0 -i ${fileListPath} -c copy ${outputPath}`, async (error, stdout, stderr) => {
+    // ✅ Re-encode with libx264 and aac to fix metadata and duration issues
+    exec(`ffmpeg -f concat -safe 0 -i ${fileListPath} -c:v libx264 -preset veryfast -crf 23 -c:a aac -b:a 128k ${outputPath}`, async (error, stdout, stderr) => {
       if (error) {
         console.error(`Error merging videos: ${error.message}`);
+        console.error(stderr);
         return res.status(500).json({ error: "Failed to merge videos." });
       }
 
@@ -51,7 +53,7 @@ app.post("/merge", async (req, res) => {
           res.status(500).json({ error: "Failed to send file." });
         }
 
-        // Clean up temp files
+        // Clean up
         tempFiles.forEach(fs.unlinkSync);
         fs.unlinkSync(fileListPath);
         fs.unlinkSync(outputPath);
