@@ -2,9 +2,9 @@
   "name": "ffmpeg-api",
   "version": "1.0.0",
   "description": "Simple API to merge videos using FFmpeg and public URLs",
-  "main": "index.js",
+  "main": "index.mjs",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.mjs"
   },
   "dependencies": {
     "axios": "^1.6.0",
