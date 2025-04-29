@@ -1,25 +1,25 @@
-# Use a full Node image with Debian base
 FROM node:18-bullseye
 
-# Install system dependencies
+# Prevent interactive prompt issues
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install only essential packages
 RUN apt-get update && apt-get install -y \
     ffmpeg \
-    python3 \
     build-essential \
-    && apt-get clean
+    python3 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Create app directory
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package.json ./
-RUN npm install
+# Copy package files and install dependencies cleanly
+COPY package*.json ./
+RUN npm install --omit=dev
 
-# Copy remaining files
+# Copy all other source files
 COPY . .
 
-# Expose port (make sure this matches your server)
+# Set port and start
 EXPOSE 8080
-
-# Start server
 CMD ["npm", "start"]
